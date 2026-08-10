@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Python cache & build
+__pycache__/
+*.pyc
+build/
+dist/
+*.spec
+*.zip
+
+# OS temporary files
+Thumbs.db
+Desktop.ini
+.DS_Store
