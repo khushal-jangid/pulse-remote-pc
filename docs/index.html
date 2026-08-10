@@ -3,296 +3,287 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PulseRemote PC - Next-Gen 3D Phone PC Remote Control Suite</title>
-  <meta name="description" content="PulseRemote PC is an ultra-modern 3D PC Remote Control Suite. Turn your mobile browser into a Giant Touchpad, Live Screen Mirror, Intruder Security Alarm, and Hardware Thermal Gauge without any cloud server.">
-  <meta name="keywords" content="pc remote control, phone to pc, trackpad app, live screen mirror, intruder alert, wifi speedometer, wake on lan">
+  <title>PulseRemote PC - The Modern PC Remote Control Suite</title>
+  <meta name="description" content="PulseRemote PC is a modern, high-performance PC remote control application built with Python, Node.js, and Win32 GDI. Control your PC from any phone over Wi-Fi.">
+  <meta name="keywords" content="pc remote control, phone to pc, trackpad, screen mirror, linear app design, open source">
   <meta name="author" content="Khushal Jangid">
   
-  <!-- Open Graph Meta Tags -->
-  <meta property="og:title" content="PulseRemote PC - Next-Gen 3D Phone to PC Remote Controller">
-  <meta property="og:description" content="Control your Windows PC from any smartphone over Wi-Fi. Features Touchpad, Screen Mirroring, Intruder Security Guard, Hardware Gauges, and 1-Tap Maintenance.">
-  <meta property="og:image" content="images/hero_3d.jpg">
-  <meta property="og:type" content="website">
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📱</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
 </head>
 <body>
 
-  <!-- Background Cyberpunk Grid & Orbs -->
-  <div class="cyber-grid"></div>
-  <div class="bg-glow-orb orb-1"></div>
-  <div class="bg-glow-orb orb-2"></div>
-  <div class="bg-glow-orb orb-3"></div>
-
-  <!-- Navigation Bar -->
+  <!-- Sleek Top Navbar -->
   <nav class="navbar">
     <div class="nav-container">
-      <div class="brand">
-        <div class="brand-logo">📱</div>
-        <span class="brand-name">PulseRemote <small class="ver-badge">v1.0</small></span>
-      </div>
+      <a href="#" class="brand">
+        <div class="brand-logo">⚡</div>
+        <span class="brand-name">PulseRemote <span class="ver-pill">v1.0.0</span></span>
+      </a>
 
       <div class="nav-links">
         <a href="#features">Features</a>
-        <a href="#demo">Live 3D Demo</a>
-        <a href="#how-it-works">Setup Guide</a>
-        <a href="https://github.com/khushal-jangid/pulse-remote-pc" target="_blank" class="nav-gh-link">⭐ GitHub</a>
-        <a href="#download" class="nav-download-btn">⚡ Download Setup</a>
+        <a href="#demo">Live Demo</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#download" class="nav-cta">Download Setup</a>
       </div>
     </div>
   </nav>
 
-  <!-- Hero Section with 3D Floating Mockup -->
-  <header class="hero-section">
+  <!-- Hero Section -->
+  <header class="hero">
     <div class="hero-container">
-      
-      <div class="hero-left">
-        <div class="hero-badge">
-          <span class="pulse-dot"></span> 100% Open Source & Zero Cloud Dependency
-        </div>
-
-        <h1 class="hero-title">
-          Control Your PC <br>
-          <span class="gradient-text">Directly From Phone</span>
-        </h1>
-
-        <p class="hero-subtitle">
-          Turn your phone browser into a Super-Sized Touchpad, Live Screen Mirror, Webcam Intruder Security Guard, Wi-Fi Traffic Speedometer, and 1-Tap PC Maintenance Remote over Wi-Fi.
-        </p>
-
-        <div class="hero-cta-group">
-          <a href="https://github.com/khushal-jangid/pulse-remote-pc/releases/download/v1.0.0/PulseRemote-Setup-Lite.exe" class="cta-btn primary-cta glow-btn">
-            <span class="cta-icon">⚡</span>
-            <div>
-              <strong>Download Fast Installer (.exe)</strong>
-              <small>Fast 34 MB Download | Windows 10 & 11</small>
-            </div>
-          </a>
-
-          <a href="https://github.com/khushal-jangid/pulse-remote-pc" target="_blank" class="cta-btn secondary-cta">
-            <span class="cta-icon">⭐</span>
-            <div>
-              <strong>Star on GitHub</strong>
-              <small>View Source & Release</small>
-            </div>
-          </a>
-        </div>
-
-        <div class="hero-feature-tags">
-          <span class="tag">🕵️‍♂️ Intruder Guard</span>
-          <span class="tag">⚡ Wi-Fi Speedometer</span>
-          <span class="tag">🖥️ Live Screen Mirror</span>
-          <span class="tag">🔋 Thermal Gauges</span>
-          <span class="tag">💡 Brightness Remote</span>
-          <span class="tag">🧠 RAM Cleaner</span>
-        </div>
+      <div class="hero-announcement">
+        <span class="announcement-tag">NEW RELEASE</span>
+        <span>PulseRemote PC v1.0 is now live</span>
+        <span class="arrow">→</span>
       </div>
 
-      <!-- 3D Parallax Floating Mockup Frame -->
-      <div class="hero-right 3d-wrapper">
-        <div class="hero-3d-card tilt-card" id="hero-card">
-          <div class="card-glow"></div>
-          <img src="images/hero_3d.jpg" alt="PulseRemote 3D Interactive App Showcase" class="hero-3d-img">
-          <div class="floating-badge badge-1">
-            <span class="dot-live"></span> Live 16 FPS Mirroring
-          </div>
-          <div class="floating-badge badge-2">
-            🚨 Motion Security Guard Active
-          </div>
-        </div>
+      <h1 class="hero-title">
+        Remote control your PC. <br>
+        <span class="hero-highlight">Without cloud. Without subscriptions.</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        Turn your mobile phone browser into a ultra-low-latency touchpad, live screen mirror, webcam intruder security alarm, and real-time hardware monitor over local Wi-Fi.
+      </p>
+
+      <div class="hero-actions">
+        <a href="https://github.com/khushal-jangid/pulse-remote-pc/releases/download/v1.0.0/PulseRemote-Setup-Lite.exe" class="btn btn-primary">
+          <span>⚡ Download Fast Setup (.exe)</span>
+          <small>34 MB · Windows 10/11</small>
+        </a>
+
+        <a href="https://github.com/khushal-jangid/pulse-remote-pc" target="_blank" class="btn btn-secondary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          <span>Star on GitHub</span>
+        </a>
       </div>
 
+      <!-- Linear Style Terminal Preview Window -->
+      <div class="terminal-preview">
+        <div class="terminal-header">
+          <div class="window-dots">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+          </div>
+          <div class="terminal-title">pulseremote-engine.log — WebSocket Server Active :3000</div>
+        </div>
+        <div class="terminal-body">
+          <div class="log-line"><span class="log-time">[14:52:10]</span> <span class="log-tag green">✔ SUCCESS</span> Engine initialized. Local IP: <code>192.168.1.104:3000</code></div>
+          <div class="log-line"><span class="log-time">[14:52:12]</span> <span class="log-tag blue">ℹ CLIENT</span> Connected Mobile Device: iPhone 15 Pro (WebSocket ID: <code>w9x2a</code>)</div>
+          <div class="log-line"><span class="log-time">[14:52:13]</span> <span class="log-tag purple">⚡ WIN32</span> GDI Screen Mirror active at 16 FPS (Latency: <code>8ms</code>)</div>
+          <div class="log-line"><span class="log-time">[14:52:15]</span> <span class="log-tag warning">🛡️ GUARD</span> OpenCV Motion Security Guard monitoring webcam stream...</div>
+        </div>
+      </div>
     </div>
   </header>
 
-  <!-- Interactive 3D Web App Touchpad Live Simulator -->
-  <section class="section demo-section" id="demo">
-    <div class="section-header">
-      <span class="section-tag">INTERACTIVE EXPERIENCE</span>
-      <h2>Try The Live 3D Touchpad Simulator</h2>
-      <p>Move your mouse or finger inside the 3D touchpad box below to see the interactive cursor effect!</p>
-    </div>
+  <!-- Bento Grid Section (Linear.app Style) -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section-intro">
+        <span class="kicker">CAPABILITIES</span>
+        <h2>Engineered for speed, privacy, and precision.</h2>
+        <p>Built directly on native Windows APIs without cloud intermediaries.</p>
+      </div>
 
-    <div class="demo-container">
-      <div class="sim-phone-wrapper tilt-card">
-        <div class="sim-phone-notch"></div>
-        <div class="sim-header">
-          <span>PulseRemote Touchpad</span>
-          <span class="sim-status">🟢 Connected</span>
-        </div>
-
-        <div class="sim-touch-surface" id="sim-touchpad">
-          <div class="sim-cursor" id="sim-cursor"></div>
-          <div class="sim-hint">
-            <div class="sim-icon">👆</div>
-            <h4>Move Cursor Here</h4>
-            <p>Interactive 3D Touchpad Demo</p>
+      <div class="bento-grid">
+        
+        <!-- Large Card 1 -->
+        <div class="bento-card card-large">
+          <div class="card-badge">COMPUTER VISION</div>
+          <h3>🕵️‍♂️ Intruder Motion Security Guard</h3>
+          <p>Real-time OpenCV frame differencing monitors your PC webcam when you're away. If motion is detected, your phone plays an instant siren alarm and displays an intruder snapshot photo.</p>
+          
+          <div class="card-graphic guard-graphic">
+            <div class="guard-scanner">
+              <div class="scan-line"></div>
+              <div class="guard-pill"><span class="pulse-green"></span> WEBCAM GUARD ACTIVE</div>
+            </div>
           </div>
         </div>
 
-        <div class="sim-buttons-row">
-          <button class="sim-btn left" id="sim-left-btn">LEFT CLICK</button>
-          <button class="sim-btn right" id="sim-right-btn">RIGHT CLICK</button>
+        <!-- Card 2 -->
+        <div class="bento-card">
+          <div class="card-badge">NETWORK IO</div>
+          <h3>⚡ Wi-Fi Traffic Speedometer</h3>
+          <p>Real-time download and upload speed gauge (KB/s & MB/s) with live ping latency and connection stability metrics.</p>
+          <div class="metric-display">
+            <div class="m-box"><span>DOWN</span><strong>92.4 MB/s</strong></div>
+            <div class="m-box"><span>LATENCY</span><strong class="green-text">4 ms</strong></div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bento-card">
+          <div class="card-badge">WIN32 GRAPHICS</div>
+          <h3>🖥️ Ultra-Fast Screen Mirroring</h3>
+          <p>Direct Win32 GDI screen capture streams ~16 FPS live desktop mirror with 1-tap tap-to-click precision.</p>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="card-small bento-card">
+          <div class="card-badge">HARDWARE CONTROL</div>
+          <h3>📷 Camera LED Power Shutdown</h3>
+          <p>DirectShow hardware control releases the camera instantly and turns off physical camera LED light on tab exit.</p>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="card-small bento-card">
+          <div class="card-badge">SYSTEM HEALTH</div>
+          <h3>🔋 Hardware Thermal Gauges</h3>
+          <p>Live CPU load %, RAM usage, battery status, and instant charger disconnect alerts.</p>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="card-small bento-card">
+          <div class="card-badge">MAINTENANCE</div>
+          <h3>🧠 1-Tap RAM & Temp Cleaner</h3>
+          <p>Trim process working sets and purge temporary files + flush DNS cache with one button press.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Live Demo Section -->
+  <section class="section demo-section" id="demo">
+    <div class="container">
+      <div class="section-intro">
+        <span class="kicker">INTERACTIVE DEMO</span>
+        <h2>Try the Mobile App Control Interface</h2>
+        <p>Click through the tabs below to preview the mobile interface controls.</p>
+      </div>
+
+      <div class="interactive-preview">
+        <div class="tab-switcher">
+          <button class="tab-btn active" data-target="p-trackpad">Trackpad</button>
+          <button class="tab-btn" data-target="p-screen">Screen Mirror</button>
+          <button class="tab-btn" data-target="p-security">Security Guard</button>
+          <button class="tab-btn" data-target="p-hardware">Hardware Stats</button>
+        </div>
+
+        <div class="preview-stage">
+          
+          <!-- Preview 1: Trackpad -->
+          <div class="stage-pane active" id="p-trackpad">
+            <div class="phone-mockup">
+              <div class="mock-header">
+                <span>PulseRemote</span>
+                <span class="green-pill">Connected</span>
+              </div>
+              <div class="mock-touchpad">
+                <div class="touch-crosshair">+</div>
+                <span>Super-Sized Touchpad Zone</span>
+                <small>1 Finger Move · Tap Click · 2 Finger Scroll</small>
+              </div>
+              <div class="mock-mouse-btns">
+                <div class="m-btn left">LEFT CLICK</div>
+                <div class="m-btn right">RIGHT CLICK</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview 2: Screen Mirror -->
+          <div class="stage-pane" id="p-screen">
+            <div class="phone-mockup">
+              <div class="mock-header">
+                <span>Live Screen Mirror</span>
+                <span class="red-pill">● LIVE 16 FPS</span>
+              </div>
+              <div class="mock-screen-view">
+                <div class="screen-wireframe">
+                  <div class="wf-bar"></div>
+                  <div class="wf-content">
+                    <div class="wf-box"></div>
+                    <div class="wf-box"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview 3: Security Guard -->
+          <div class="stage-pane" id="p-security">
+            <div class="phone-mockup">
+              <div class="mock-header">
+                <span>Security Hub</span>
+                <span class="green-pill">Guard Active</span>
+              </div>
+              <div class="mock-card">
+                <h4>🕵️‍♂️ Motion Security Guard</h4>
+                <p>Webcam monitoring motion in front of PC...</p>
+                <div class="siren-bar">🚨 Siren Sound Alert Enabled</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview 4: Hardware Stats -->
+          <div class="stage-pane" id="p-hardware">
+            <div class="phone-mockup">
+              <div class="mock-header">
+                <span>Hardware Metrics</span>
+                <span>192.168.1.104</span>
+              </div>
+              <div class="mock-metrics">
+                <div class="metric-row"><span>CPU Usage</span><strong>34%</strong></div>
+                <div class="metric-row"><span>RAM Memory</span><strong>8.2 GB / 16 GB</strong></div>
+                <div class="metric-row"><span>Battery</span><strong>98% Plugged In</strong></div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Main Content Sections -->
-  <main class="main-content">
+  <!-- Download CTA Section -->
+  <section class="section download-section" id="download">
+    <div class="container">
+      <div class="cta-box">
+        <div class="cta-badge">GET STARTED IN SECONDS</div>
+        <h2>Ready to remote control your PC?</h2>
+        <p>Download the official installer for Windows 10 & 11. 100% free and open source.</p>
 
-    <!-- Interactive 3D Features Grid -->
-    <section class="section" id="features">
-      <div class="section-header">
-        <span class="section-tag">POWERFUL CAPABILITIES</span>
-        <h2>Everything You Need To Control PC Remotely</h2>
-        <p>Built with native Win32 GDI, OpenCV computer vision, and real-time WebSockets.</p>
-      </div>
-
-      <div class="features-grid">
-        
-        <!-- Feature 1 -->
-        <div class="feature-card glass-card tilt-card">
-          <div class="feature-icon icon-emerald">🕵️‍♂️</div>
-          <h3>Intruder Motion Security Guard</h3>
-          <p>When you walk away from your PC, webcam monitors motion. If an intruder approaches your PC, phone triggers an audio siren alarm & snapshot photo instantly!</p>
-        </div>
-
-        <!-- Feature 2 -->
-        <div class="feature-card glass-card tilt-card">
-          <div class="feature-icon icon-indigo">⚡</div>
-          <h3>Wi-Fi Download & Upload Speedometer</h3>
-          <p>Live Network Traffic speedometer on phone showing download/upload KB/s and MB/s speeds along with Wi-Fi ping latency & connection quality.</p>
-        </div>
-
-        <!-- Feature 3 -->
-        <div class="feature-card glass-card tilt-card">
-          <div class="feature-icon icon-purple">🖥️</div>
-          <h3>Real-Time Screen Mirroring</h3>
-          <p>Ultra-fast ~16 FPS Win32 GDI desktop mirror. Tap anywhere on the live PC screen on your phone to click on that exact spot!</p>
-        </div>
-
-        <!-- Feature 4 -->
-        <div class="feature-card glass-card tilt-card">
-          <div class="feature-icon icon-pink">📷</div>
-          <h3>Webcam Feed & Hardware LED Shutdown</h3>
-          <p>Live camera stream on phone. When you stop the webcam feed or switch tabs, camera hardware releases instantly and physical camera LED light turns OFF.</p>
-        </div>
-
-        <!-- Feature 5 -->
-        <div class="feature-card glass-card tilt-card">
-          <div class="feature-icon icon-warning">📱</div>
-          <h3>Giant Touchpad Gesture Control</h3>
-          <p>Full touch gesture support: 1 finger cursor move, 1 finger tap click, 2 finger scroll, 2 finger right click, and Drag Lock toggle.</p>
-        </div>
-
-        <!-- Feature 6 -->
-        <div class="feature-card glass-card tilt-card">
-          <div class="feature-icon icon-blue">🔋</div>
-          <h3>Hardware Thermal Metrics & Gauges</h3>
-          <p>Live CPU load %, RAM usage (GB used/total), PC battery level & charger unplugged warning alerts on your phone screen.</p>
-        </div>
-
-        <!-- Feature 7 -->
-        <div class="feature-card glass-card tilt-card">
-          <div class="feature-icon icon-amber">💡</div>
-          <h3>PC Screen Brightness Remote</h3>
-          <p>Smooth slider (10% to 100%) on phone to adjust PC monitor screen brightness remotely from your bed or desk.</p>
-        </div>
-
-        <!-- Feature 8 -->
-        <div class="feature-card glass-card tilt-card">
-          <div class="feature-icon icon-rose">🧠</div>
-          <h3>1-Tap Quick PC Maintenance</h3>
-          <p>Free RAM working set memory across processes and clear %temp% files + flush DNS cache with 1-tap from your phone.</p>
-        </div>
-
-        <!-- Feature 9 -->
-        <div class="feature-card glass-card tilt-card">
-          <div class="feature-icon icon-cyan">📑</div>
-          <h3>PC Clipboard History Vault</h3>
-          <p>View history of copied text snippets on PC and tap any item to copy it back to PC clipboard seamlessly.</p>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section class="section how-section" id="how-it-works">
-      <div class="section-header">
-        <span class="section-tag">EASY 3-STEP SETUP</span>
-        <h2>How To Get Started In 60 Seconds</h2>
-      </div>
-
-      <div class="steps-grid">
-        <div class="step-card tilt-card">
-          <div class="step-num">01</div>
-          <h3>Install On PC</h3>
-          <p>Download and run <code>PulseRemote-Setup-Lite.exe</code> on your Windows PC. Follow the 1-click wizard.</p>
-        </div>
-
-        <div class="step-card tilt-card">
-          <div class="step-num">02</div>
-          <h3>Scan QR Code</h3>
-          <p>Open PulseRemote desktop app. Scan the QR code shown on PC screen using your phone's camera.</p>
-        </div>
-
-        <div class="step-card tilt-card">
-          <div class="step-num">03</div>
-          <h3>Control PC Remotely</h3>
-          <p>Enjoy complete mobile trackpad, screen mirror, motion security guard, and hardware controls!</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Downloads Section -->
-    <section class="section download-section" id="download">
-      <div class="download-box glass-card glow-card tilt-card">
-        <div class="dl-badge">OFFICIAL RELEASE v1.0</div>
-        <h2>Download PulseRemote PC</h2>
-        <p>Choose your download option. The Lite edition downloads 4X faster in just 2 seconds!</p>
-        
-        <div class="dl-buttons-row" style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
-          <a id="btn-download-installer" href="https://github.com/khushal-jangid/pulse-remote-pc/releases/download/v1.0.0/PulseRemote-Setup-Lite.exe" class="cta-btn primary-cta dl-main-btn glow-btn">
-            <span class="cta-icon">⚡</span>
-            <div>
-              <strong>Fast Lite Installer (.exe)</strong>
-              <small>Fastest Download: 34 MB | Windows 10 & 11</small>
-            </div>
+        <div class="cta-buttons">
+          <a href="https://github.com/khushal-jangid/pulse-remote-pc/releases/download/v1.0.0/PulseRemote-Setup-Lite.exe" class="btn btn-primary btn-lg">
+            ⚡ Download Fast Installer (.exe)
+            <small>Fast 34 MB Download</small>
           </a>
 
-          <a href="https://github.com/khushal-jangid/pulse-remote-pc/releases/download/v1.0.0/PulseRemote-Setup-v1.0.exe" class="cta-btn secondary-cta dl-main-btn">
-            <span class="cta-icon">📦</span>
-            <div>
-              <strong>Full Offline Installer (.exe)</strong>
-              <small>Full Bundle: 120 MB | Offline Package</small>
-            </div>
+          <a href="https://github.com/khushal-jangid/pulse-remote-pc/releases/download/v1.0.0/PulseRemote-Setup-v1.0.exe" class="btn btn-secondary btn-lg">
+            📦 Full Offline Installer (.exe)
+            <small>Full Bundle 120 MB</small>
           </a>
         </div>
 
-        <div class="sys-req-list" style="margin-top: 20px;">
+        <div class="requirements">
           <span>✓ Windows 10 / 11 (64-bit)</span>
-          <span>✓ Wi-Fi Local Network Connection</span>
-          <span>✓ No Admin Privileges Required</span>
-          <span>✓ 100% Virus & Malware Free</span>
+          <span>✓ Wi-Fi Local Network</span>
+          <span>✓ No Admin Privileges Needed</span>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-  </main>
-
-  <!-- Footer -->
+  <!-- Sleek Developer Footer -->
   <footer class="footer">
-    <div class="footer-container">
-      <div class="footer-brand">
-        <span class="brand-logo">📱</span>
-        <span>PulseRemote PC</span>
+    <div class="container footer-container">
+      <div class="footer-left">
+        <span class="footer-logo">⚡ PulseRemote PC</span>
+        <span>Built by <a href="https://github.com/khushal-jangid" target="_blank">Khushal Jangid</a></span>
       </div>
-      <p class="footer-copy">Created with ❤️ by <a href="https://github.com/khushal-jangid" target="_blank">Khushal Jangid</a>. Released under the MIT License.</p>
+      <div class="footer-links">
+        <a href="https://github.com/khushal-jangid/pulse-remote-pc" target="_blank">GitHub</a>
+        <a href="https://github.com/khushal-jangid/pulse-remote-pc/releases" target="_blank">Releases</a>
+        <a href="https://github.com/khushal-jangid/pulse-remote-pc/blob/master/LICENSE" target="_blank">MIT License</a>
+      </div>
     </div>
   </footer>
 
