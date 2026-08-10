@@ -43,6 +43,7 @@ class NodeServerThread(QThread):
             if not os.path.exists(node_bin):
                 node_bin = 'node'
                 
+            creation_flags = 0x08000000 if sys.platform == 'win32' else 0
             self.process = subprocess.Popen(
                 [node_bin, 'server.js'],
                 cwd=self.cwd,
@@ -50,7 +51,8 @@ class NodeServerThread(QThread):
                 stderr=subprocess.STDOUT,
                 text=True,
                 encoding='utf-8',
-                bufsize=1
+                bufsize=1,
+                creationflags=creation_flags
             )
             for line in iter(self.process.stdout.readline, ''):
                 if line:
@@ -75,6 +77,16 @@ class MainWindow(QMainWindow):
         self.port = 3000
         self.server_url = f"http://{self.local_ip}:{self.port}"
         
+        if sys.platform == 'win32':
+            try:
+                subprocess.run(
+                    'netsh advfirewall firewall add rule name="PulseRemote" dir=in action=allow protocol=TCP localport=3000',
+                    shell=True,
+                    creationflags=0x08000000
+                )
+            except Exception:
+                pass
+
         self.init_ui()
         self.start_server()
 

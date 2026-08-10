@@ -22,14 +22,22 @@ const downloadsDir = path.join(os.homedir(), 'Downloads');
 
 function getLocalIP() {
   const interfaces = os.networkInterfaces();
+  let preferredIP = null;
+  let fallbackIP = null;
+
   for (const name of Object.keys(interfaces)) {
+    const isVirtual = /virtual|vbox|vmnet|vethernet|wsl|bluetooth|docker|hyper-v/i.test(name);
     for (const net of interfaces[name]) {
       if (net.family === 'IPv4' && !net.internal) {
-        return net.address;
+        if (!isVirtual && !preferredIP) {
+          preferredIP = net.address;
+        } else if (!fallbackIP) {
+          fallbackIP = net.address;
+        }
       }
     }
   }
-  return '127.0.0.1';
+  return preferredIP || fallbackIP || '127.0.0.1';
 }
 
 const localIP = getLocalIP();

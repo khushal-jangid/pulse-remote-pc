@@ -191,16 +191,6 @@ def get_hardware_stats():
 
         last_power_plugged = batt_plugged
 
-        if ram_percent > 92 or cpu > 92:
-            alert_obj = {
-                "type": "sys_alert",
-                "alert_type": "high_stress",
-                "title": "⚠️ System High Stress Warning!",
-                "message": f"PC Stress Critical: CPU {cpu}% | RAM {ram_percent}%"
-            }
-            with stream_lock:
-                print(json.dumps(alert_obj), flush=True)
-
         now = time.time()
         time_delta = max(0.1, now - last_net_time)
         net_io = psutil.net_io_counters()

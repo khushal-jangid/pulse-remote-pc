@@ -14,7 +14,8 @@ class PyBridge extends EventEmitter {
   init() {
     const scriptPath = path.join(__dirname, 'py-worker.py');
     this.py = spawn('python', [scriptPath], {
-      stdio: ['pipe', 'pipe', 'pipe']
+      stdio: ['pipe', 'pipe', 'pipe'],
+      windowsHide: true
     });
 
     let buffer = '';
