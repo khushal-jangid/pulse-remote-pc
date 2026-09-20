@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Pulse Remote</title>
+  <link rel="stylesheet" href="/static/style.css?v=2.4">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Pairing Overlay Screen -->
+  <div id="pairing-screen" class="screen-overlay">
+    <div class="pair-card">
+      <div class="brand-badge">
+        <span class="brand-dot"></span>
+        <span>PULSE REMOTE</span>
+      </div>
+
+      <h2>Pair with PC</h2>
+      <p class="pair-desc">Connecting to <span id="target-pc-name" class="highlight">Windows PC</span></p>
+
+      <div id="pair-status-box" class="status-box">
+        <span class="spinner"></span>
+        <span id="pair-status-text">Validating QR token...</span>
+      </div>
+
+      <div class="manual-pair-box" id="manual-pair-box" style="display: none; margin-top: 16px;">
+        <p style="font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 4px;">Enter 6-Digit PIN from PC:</p>
+        <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px;">Check your PC Agent window for the 6-digit PIN</p>
+        <input type="text" id="manual-token-input" placeholder="e.g. 583920" class="input-field" style="font-family: var(--font-mono); font-size: 18px; text-align: center; letter-spacing: 4px; font-weight: 800;">
+        <button id="manual-pair-btn" class="btn btn-primary" style="margin-top: 10px; width: 100%;">Connect to PC</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App Shell (Grid Layout: Header, Scrollable Body, Bottom Nav) -->
+  <div id="app-container" class="app-container hidden">
+    
+    <!-- Row 1: Top Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="status-badge">
+          <span class="status-dot online"></span>
+          <span id="connected-pc-name" class="pc-name">Windows PC</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <span id="latency-badge" class="latency-pill">Direct Wi-Fi</span>
+        <button id="btn-panic-mode" class="btn-action-panic" title="🚨 Boss Key: Hide screen & mute sound instantly">
+          <span>🚨</span>
+          <span>Boss Key</span>
+        </button>
+        <button id="btn-emergency-lock" class="btn-action-lock" title="Lock PC Instantly">
+          <span>🔒</span>
+          <span>Lock</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Row 2: Scrollable Main Content -->
+    <main class="main-content">
+
+      <!-- ================= TAB 1: TRACKPAD ================= -->
+      <section id="tab-trackpad" class="tab-panel active">
+        <div class="trackpad-screen">
+          <!-- Top Speed & Scroll Header -->
+          <div class="trackpad-top-bar">
+            <div class="speed-toggle">
+              <span class="bar-tag">Speed:</span>
+              <button class="btn-speed active" data-sens="1.0">1x</button>
+              <button class="btn-speed" data-sens="1.6">1.5x</button>
+              <button class="btn-speed" data-sens="2.4">2.5x</button>
+            </div>
+            <div class="scroll-actions">
+              <button class="btn-scroll" id="btn-scroll-up">▲ Up</button>
+              <button class="btn-scroll" id="btn-scroll-down">▼ Down</button>
+            </div>
+          </div>
+
+          <!-- Giant Touchpad Surface -->
+          <div id="touch-surface" class="touch-surface">
+            <div id="virtual-pointer" class="virtual-pointer"></div>
+            <div class="touch-guidelines">
+              <div class="touch-icon-wrap">👆</div>
+              <p class="touch-main-text">Precision Touchpad</p>
+              <p class="touch-sub-text">Slide to move • Tap = Left Click • 2 Fingers = Scroll</p>
+            </div>
+          </div>
+
+          <!-- Bottom Left, Middle & Right Click Pads -->
+          <div class="touch-click-pads">
+            <button id="btn-left-click" class="pad-btn pad-left">
+              <span class="pad-title">LEFT CLICK</span>
+            </button>
+            <button id="btn-middle-click" class="pad-btn pad-mid">
+              <span class="pad-title">MIDDLE</span>
+            </button>
+            <button id="btn-right-click" class="pad-btn pad-right">
+              <span class="pad-title">RIGHT CLICK</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 2: REMOTE & KEYS ================= -->
+      <section id="tab-remote" class="tab-panel">
+        <!-- Sub-Mode Switcher Pills (Horizontal Scroll) -->
+        <div class="segmented-pills">
+          <button class="sub-pill active" data-sub="keys">⌨️ Keys</button>
+          <button class="sub-pill" data-sub="media">🎵 Media</button>
+          <button class="sub-pill" data-sub="presenter">📽️ Slides</button>
+          <button class="sub-pill" data-sub="gaming">🎮 Gamepad</button>
+          <button class="sub-pill" data-sub="custom">🛠️ Custom</button>
+        </div>
+
+        <!-- Sub 1: Typing & Shortcuts -->
+        <div id="sub-keys" class="sub-panel active">
+          <div class="app-card">
+            <form id="type-form" class="type-box">
+              <input type="text" id="type-text-input" placeholder="Type text to send to PC..." class="input-field">
+              <button type="submit" class="btn btn-primary" style="flex-shrink: 0; min-width: 80px;">Send</button>
+            </form>
+
+            <!-- 1-Tap Boss / Panic Key Banner -->
+            <button id="btn-panic-banner" class="btn-panic-banner" title="🚨 Boss Key: Hide all windows & mute sound instantly">
+              <span class="pulse-alarm-dot"></span>
+              <span>🚨 <strong>1-TAP BOSS / PANIC KEY</strong> (Hide Apps & Mute)</span>
+            </button>
+
+            <span class="card-section-label">⚡ SYSTEM SHORTCUTS</span>
+            <div class="grid-2">
+              <button class="btn-tile" data-shortcut="win+d">
+                <span class="tile-icon-badge badge-blue">🪟</span>
+                <span class="tile-text">Show Desktop</span>
+              </button>
+              <button class="btn-tile" data-shortcut="alt+tab">
+                <span class="tile-icon-badge badge-purple">🔀</span>
+                <span class="tile-text">Alt + Tab</span>
+              </button>
+              <button class="btn-tile" data-shortcut="win+e">
+                <span class="tile-icon-badge badge-amber">📁</span>
+                <span class="tile-text">File Explorer</span>
+              </button>
+              <button class="btn-tile" data-shortcut="alt+f4">
+                <span class="tile-icon-badge badge-red">❌</span>
+                <span class="tile-text">Close (Alt+F4)</span>
+              </button>
+              <button class="btn-tile" data-shortcut="ctrl+c">
+                <span class="tile-icon-badge badge-cyan">📋</span>
+                <span class="tile-text">Copy (Ctrl+C)</span>
+              </button>
+              <button class="btn-tile" data-shortcut="ctrl+v">
+                <span class="tile-icon-badge badge-green">📥</span>
+                <span class="tile-text">Paste (Ctrl+V)</span>
+              </button>
+              <button class="btn-tile" data-shortcut="ctrl+s">
+                <span class="tile-icon-badge badge-indigo">💾</span>
+                <span class="tile-text">Save (Ctrl+S)</span>
+              </button>
+              <button class="btn-tile" data-shortcut="ctrl+z">
+                <span class="tile-icon-badge badge-orange">↩️</span>
+                <span class="tile-text">Undo (Ctrl+Z)</span>
+              </button>
+            </div>
+
+            <span class="card-section-label" style="margin-top: 18px;">🔤 SPECIAL KEYS</span>
+            <div class="grid-3">
+              <button class="btn-key-tile" data-key="escape">ESC</button>
+              <button class="btn-key-tile" data-key="tab">TAB</button>
+              <button class="btn-key-tile" data-key="space">SPACE</button>
+              <button class="btn-key-tile" data-key="backspace">⌫ BKSP</button>
+              <button class="btn-key-tile btn-key-accent" data-key="enter">ENTER ↵</button>
+              <button class="btn-key-tile" data-key="delete">DEL</button>
+              <button class="btn-key-tile" data-key="arrowleft">◄ Left</button>
+              <button class="btn-key-tile" data-key="arrowup">▲ Up</button>
+              <button class="btn-key-tile" data-key="arrowdown">▼ Down</button>
+              <button class="btn-key-tile" data-key="arrowright">► Right</button>
+              <button class="btn-key-tile" data-shortcut="win+r">🚀 Win+R</button>
+              <button class="btn-key-tile" data-shortcut="ctrl+shift+esc">📊 TaskMgr</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub 2: Media Remote -->
+        <div id="sub-media" class="sub-panel">
+          <div class="app-card text-center">
+            <h3 style="margin-bottom: 20px; font-weight: 800;">Media Controller</h3>
+            
+            <div class="media-big-controls">
+              <button class="btn-media-round" data-shortcut="prev_track" title="Previous Track">⏮</button>
+              <button class="btn-media-round-primary" data-shortcut="play_pause" title="Play / Pause">⏯</button>
+              <button class="btn-media-round" data-shortcut="next_track" title="Next Track">⏭</button>
+            </div>
+
+            <div class="volume-container" style="margin-top: 16px;">
+              <span class="card-section-label">🔊 VOLUME CONTROLS</span>
+              <div class="grid-3" style="margin-top: 10px;">
+                <button class="btn-volume-box" data-shortcut="volume_down">
+                  <span class="vol-icon badge-indigo">🔉</span>
+                  <span>Volume -</span>
+                </button>
+                <button class="btn-volume-box btn-mute-box" data-shortcut="volume_mute">
+                  <span class="vol-icon badge-red">🔇</span>
+                  <span>Mute</span>
+                </button>
+                <button class="btn-volume-box" data-shortcut="volume_up">
+                  <span class="vol-icon badge-indigo">🔊</span>
+                  <span>Volume +</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Screen Brightness Control -->
+            <div class="brightness-container" style="margin-top: 20px;">
+              <div class="flex-between" style="align-items: center; margin-bottom: 8px;">
+                <span class="card-section-label" style="margin-bottom: 0;">☀️ PC SCREEN BRIGHTNESS</span>
+                <span id="brightness-val-badge" class="badge-pill-cyan">100%</span>
+              </div>
+              <div class="slider-row">
+                <span style="font-size: 16px;">🔅</span>
+                <input type="range" id="brightness-slider" min="0" max="100" value="100" class="custom-range-slider">
+                <span style="font-size: 16px;">🔆</span>
+              </div>
+              <div class="grid-4" style="margin-top: 10px;">
+                <button class="btn-preset-chip" data-brightness="25">25%</button>
+                <button class="btn-preset-chip" data-brightness="50">50%</button>
+                <button class="btn-preset-chip" data-brightness="75">75%</button>
+                <button class="btn-preset-chip" data-brightness="100">100%</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub 3: Presentation Slides -->
+        <div id="sub-presenter" class="sub-panel">
+          <div class="app-card">
+            <h3>📽️ Presentation Remote</h3>
+            <div class="grid-2" style="margin: 16px 0;">
+              <button class="btn-huge-slide badge-green-glow" data-shortcut="pagedown">
+                <span class="huge-icon">⏭</span>
+                <strong>NEXT SLIDE</strong>
+              </button>
+              <button class="btn-huge-slide badge-blue-glow" data-shortcut="pageup">
+                <span class="huge-icon">⏮</span>
+                <strong>PREV SLIDE</strong>
+              </button>
+            </div>
+            <div class="grid-2">
+              <button class="btn-tile" data-key="f5">
+                <span class="tile-icon-badge badge-green">▶</span>
+                <span class="tile-text">Start (F5)</span>
+              </button>
+              <button class="btn-tile" data-shortcut="shift+f5">
+                <span class="tile-icon-badge badge-blue">▶</span>
+                <span class="tile-text">Current Slide</span>
+              </button>
+              <button class="btn-tile" data-key="b">
+                <span class="tile-icon-badge badge-dark">⬛</span>
+                <span class="tile-text">Black Screen</span>
+              </button>
+              <button class="btn-tile" data-key="escape">
+                <span class="tile-icon-badge badge-red">⏹</span>
+                <span class="tile-text">Exit Slides</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub 4: Gaming Controls -->
+        <div id="sub-gaming" class="sub-panel">
+          <div class="app-card">
+            <h3>🎮 Gamepad Remote</h3>
+            <div class="dpad-box">
+              <button class="btn-dpad-key" data-key="w">W</button>
+              <div class="dpad-middle-row">
+                <button class="btn-dpad-key" data-key="a">A</button>
+                <button class="btn-dpad-key" data-key="s">S</button>
+                <button class="btn-dpad-key" data-key="d">D</button>
+              </div>
+            </div>
+            <div class="grid-2" style="margin-top: 16px;">
+              <button class="btn-action-pad" data-key="space">SPACE (Jump)</button>
+              <button class="btn-action-pad" data-key="shift">SHIFT (Sprint)</button>
+              <button class="btn-action-pad" data-key="e">E (Interact)</button>
+              <button class="btn-action-pad" data-key="r">R (Reload)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub 5: Custom Buttons -->
+        <div id="sub-custom" class="sub-panel">
+          <div class="app-card">
+            <div class="card-header">
+              <h3>🛠️ Custom Actions</h3>
+              <button id="btn-add-custom-btn" class="btn btn-sm btn-primary">+ Add Button</button>
+            </div>
+
+            <div id="custom-buttons-container" class="grid-2" style="margin-top: 12px;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 3: LIVE VIEW (SCREEN & WEBCAM) ================= -->
+      <section id="tab-screen" class="tab-panel">
+        <div class="segmented-pills">
+          <button class="view-pill active" data-view="screen">🖥️ Desktop Mirror</button>
+          <button class="view-pill" data-view="webcam">📷 PC Webcam</button>
+        </div>
+
+        <!-- PC Screen Mirroring View -->
+        <div id="view-screen" class="view-panel active">
+          <div class="app-card live-view-card">
+            <div class="card-header-stack">
+              <div class="header-row-1">
+                <span class="live-pill-tag">🔴 HD LIVE</span>
+                <div class="flex gap-2">
+                  <button id="btn-toggle-stream" class="btn btn-primary btn-sm">▶ Start Stream</button>
+                  <button id="btn-screen-fs" class="btn btn-tool btn-sm">⛶ Fullscreen</button>
+                </div>
+              </div>
+              <div class="header-row-2">
+                <span class="bar-tag" style="margin-right: 4px;">Displays:</span>
+                <div id="monitors-pill-container" class="monitors-pills"></div>
+              </div>
+            </div>
+
+            <!-- Enhanced Live Screen Viewport -->
+            <div id="screen-viewport" class="stream-viewport-large">
+              <img id="screen-img" alt="PC Screen" class="stream-img-large hidden">
+              <div id="screen-placeholder" class="stream-placeholder">
+                <div class="stream-center-icon">🖥️</div>
+                <p style="font-size: 16px; font-weight: 800; color: #fff;">Desktop Screen Mirror</p>
+                <p style="font-size: 12px; margin-top: 4px; color: var(--text-muted);">Tap "Start Stream" above to mirror & control PC</p>
+              </div>
+              <!-- Touch Ripple Effect Target -->
+              <div id="touch-ripple" class="touch-ripple"></div>
+            </div>
+            
+            <div class="stream-footer-hint">
+              <span>💡 <strong>Touch to Click</strong>: Tap directly on the live screen to click that point on your PC</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PC Webcam View -->
+        <div id="view-webcam" class="view-panel">
+          <div class="app-card live-view-card">
+            <div class="card-header">
+              <span class="live-pill-tag badge-purple-pill">📷 WEBCAM STREAM</span>
+              <button id="btn-toggle-webcam" class="btn btn-primary btn-sm">▶ Start Camera</button>
+            </div>
+
+            <div id="webcam-viewport" class="stream-viewport-large">
+              <img id="webcam-img" alt="PC Camera" class="stream-img-large hidden">
+              <div id="webcam-placeholder" class="stream-placeholder">
+                <div class="stream-center-icon">📷</div>
+                <p style="font-size: 16px; font-weight: 800; color: #fff;">Live PC Camera</p>
+                <p style="font-size: 12px; margin-top: 4px; color: var(--text-muted);">Tap "Start Camera" to preview PC webcam</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 4: FILES & CLIPBOARD ================= -->
+      <section id="tab-files" class="tab-panel">
+        <div class="segmented-pills">
+          <button class="file-pill active" data-filetab="files">📁 File Explorer</button>
+          <button class="file-pill" data-filetab="clipboard">📋 Clipboard Sync</button>
+        </div>
+
+        <!-- Sub: File Explorer -->
+        <div id="filetab-files" class="file-sub-panel active">
+          <div class="app-card">
+            <div class="card-header">
+              <h3>📁 Files</h3>
+              <label class="btn btn-primary btn-sm upload-btn">
+                <span>⬆ Upload</span>
+                <input type="file" id="file-uploader" style="display: none;">
+              </label>
+            </div>
+
+            <!-- Upload Progress HUD -->
+            <div id="transfer-hud" class="transfer-hud hidden">
+              <div class="hud-top">
+                <span id="transfer-filename">Uploading file...</span>
+                <span id="transfer-percent" style="color: var(--cyan); font-weight: 800;">0%</span>
+              </div>
+              <div class="progress-track"><div id="transfer-bar-fill" class="progress-bar"></div></div>
+              <div class="hud-meta">
+                <span id="transfer-speed">Speed: -- MB/s</span>
+                <span id="transfer-eta">ETA: --</span>
+              </div>
+            </div>
+
+            <div class="quick-folders" id="quick-folders"></div>
+            <div class="breadcrumb-box" id="crumb-current-path">Desktop</div>
+            <div class="file-items-list" id="file-list-container">
+              <div class="loading-text">Loading files...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub: Universal Clipboard -->
+        <div id="filetab-clipboard" class="file-sub-panel">
+          <div class="app-card">
+            <div class="card-header">
+              <h3>📋 Clipboard</h3>
+              <button id="btn-clear-clipboard" class="btn btn-sm btn-danger">Clear</button>
+            </div>
+
+            <div class="clip-field">
+              <label class="card-section-label">📥 PC CLIPBOARD (LIVE)</label>
+              <textarea id="clip-pc-text" rows="3" readonly class="input-field" placeholder="Tap 'Fetch from PC' below..."></textarea>
+              <button id="btn-get-clipboard" class="btn btn-tool" style="width: 100%; margin-top: 8px;">📥 Fetch PC Clipboard</button>
+            </div>
+
+            <div class="clip-field" style="margin-top: 16px;">
+              <label class="card-section-label">📤 SEND TEXT TO PC</label>
+              <textarea id="clip-phone-text" rows="3" class="input-field" placeholder="Type text here to paste into PC..."></textarea>
+              <button id="btn-set-clipboard" class="btn btn-primary" style="width: 100%; margin-top: 8px;">📤 Send to PC Clipboard</button>
+            </div>
+
+            <div style="margin-top: 16px;">
+              <span class="card-section-label">🕒 RECENT CLIPBOARD HISTORY</span>
+              <div id="clip-history-container" class="history-chips"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 5: DASHBOARD & PERFORMANCE ================= -->
+      <section id="tab-system" class="tab-panel">
+        <!-- 1. Find My PC Banner -->
+        <div class="app-card find-pc-banner">
+          <div class="find-pc-left">
+            <div class="bell-circle badge-amber-glow">🔔</div>
+            <div>
+              <strong style="font-size: 15px;">Find My PC</strong>
+              <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Play loud ring sound on computer</p>
+            </div>
+          </div>
+          <button id="btn-find-pc-toggle" class="btn btn-primary" style="flex-shrink: 0; min-width: 90px;">Ring PC</button>
+        </div>
+
+        <!-- 2. Quick App Launchers -->
+        <div class="app-card" style="margin-top: 12px;">
+          <h3>🚀 Quick App Launchers</h3>
+          <div id="quick-actions-grid" class="grid-2" style="margin-top: 10px;"></div>
+        </div>
+
+        <!-- 3. Live Hardware Resource Monitor (HUD) -->
+        <div class="app-card" style="margin-top: 12px;">
+          <div class="card-header">
+            <h3>📈 Live Hardware Monitor (HUD)</h3>
+            <span class="live-pill-tag">LIVE 2s</span>
+          </div>
+          <div class="grid-3" style="margin-top: 10px;">
+            <div class="stat-box">
+              <span class="stat-name">CPU USAGE</span>
+              <span id="stat-cpu" class="stat-number">-- %</span>
+              <div class="mini-bar"><div id="bar-cpu" class="bar-fill bar-fill-cpu"></div></div>
+            </div>
+            <div class="stat-box">
+              <span class="stat-name">RAM USAGE</span>
+              <span id="stat-ram" class="stat-number">-- GB</span>
+              <div class="mini-bar"><div id="bar-ram" class="bar-fill bar-fill-ram"></div></div>
+            </div>
+            <div class="stat-box">
+              <span class="stat-name">DISK (C:)</span>
+              <span id="stat-disk" class="stat-number">-- GB</span>
+              <div class="mini-bar"><div id="bar-disk" class="bar-fill bar-fill-disk"></div></div>
+            </div>
+          </div>
+          <div class="stat-footer" style="margin-top: 12px;">
+            <span id="stat-net" style="font-weight: 700; color: var(--cyan);">▲ 0 KB/s | ▼ 0 KB/s</span>
+            <span id="stat-cpu-model" style="font-size: 11px; color: var(--text-muted);">Processor</span>
+          </div>
+        </div>
+
+        <!-- 4. Laptop Battery & Smart Charger Alert HUD -->
+        <div class="app-card" id="card-battery-hud" style="margin-top: 12px;">
+          <div class="card-header">
+            <div class="flex gap-2" style="align-items: center;">
+              <span id="battery-icon" style="font-size: 20px;">🔋</span>
+              <h3 id="stat-battery-title">Battery & Charger HUD</h3>
+            </div>
+            <span id="stat-battery-percent" class="badge-pill-green">--%</span>
+          </div>
+          <div class="mini-bar" style="height: 10px; margin-top: 10px;">
+            <div id="bar-battery" class="bar-fill bar-fill-battery" style="width: 0%;"></div>
+          </div>
+          <div class="flex-between" style="margin-top: 8px; font-size: 12px;">
+            <span id="stat-battery-status" style="font-weight: 700; color: #fff;">Detecting power source...</span>
+            <span id="stat-battery-time" style="color: var(--text-muted);">--</span>
+          </div>
+          <div class="smart-alert-pill" style="margin-top: 10px;">
+            <span>🔔 <strong>Smart Health Guard:</strong> Auto-alerts phone at 100% (unplug) & 20% (low)</span>
+          </div>
+        </div>
+
+        <!-- 5. Security & Smart Automation (Walk-Away Lock & CCTV Guard) -->
+        <div class="app-card" style="margin-top: 12px;">
+          <div class="card-header">
+            <h3>🛡️ Smart Security & Anti-Theft</h3>
+          </div>
+
+          <!-- Walk-Away Proximity Auto-Lock Switch -->
+          <div class="setting-toggle-row">
+            <div class="toggle-info">
+              <strong>🚶 Walk-Away Auto-Lock</strong>
+              <p>Automatically locks PC when phone disconnects / leaves Wi-Fi range</p>
+            </div>
+            <label class="switch-toggle">
+              <input type="checkbox" id="toggle-walkaway-lock">
+              <span class="slider-round"></span>
+            </label>
+          </div>
+
+          <!-- CCTV Stealth PC Guard Switch -->
+          <div class="setting-toggle-row" style="margin-top: 12px;">
+            <div class="toggle-info">
+              <strong>🛡️ CCTV Intruder Alert (Stealth Guard)</strong>
+              <p>Captures stealth webcam photo & rings phone if mouse is moved</p>
+            </div>
+            <label class="switch-toggle">
+              <input type="checkbox" id="toggle-cctv-guard">
+              <span class="slider-round"></span>
+            </label>
+          </div>
+
+          <!-- Last Intruder Snapshot Preview Box -->
+          <div id="intruder-preview-box" class="intruder-preview-card hidden" style="margin-top: 12px;">
+            <div class="intruder-preview-header">
+              <span class="pulse-alarm-dot"></span>
+              <strong>🚨 Last Intruder Captured</strong>
+              <span id="intruder-preview-time" style="font-size: 11px; color: var(--text-muted);">Just now</span>
+            </div>
+            <div class="intruder-img-box">
+              <img id="intruder-preview-img" alt="Intruder Snapshot">
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Paired Devices -->
+        <div class="app-card" style="margin-top: 12px;">
+          <div class="card-header">
+            <h3>📱 Connected Devices</h3>
+            <button id="btn-revoke-all" class="btn btn-sm btn-danger">Disconnect All</button>
+          </div>
+          <div id="paired-devices-container" class="devices-list"></div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Row 3: Bottom Navigation Bar (Non-overlapping Grid Row) -->
+    <nav class="bottom-nav">
+      <button class="nav-btn active" data-tab="trackpad">
+        <span class="nav-ico">🖱️</span>
+        <span class="nav-txt">Trackpad</span>
+      </button>
+      <button class="nav-btn" data-tab="remote">
+        <span class="nav-ico">🎮</span>
+        <span class="nav-txt">Remote</span>
+      </button>
+      <button class="nav-btn" data-tab="screen">
+        <span class="nav-ico">🖥️</span>
+        <span class="nav-txt">Live View</span>
+      </button>
+      <button class="nav-btn" data-tab="files">
+        <span class="nav-ico">📁</span>
+        <span class="nav-txt">Files</span>
+      <button class="nav-btn" data-tab="system">
+        <span class="nav-ico">⚡</span>
+        <span class="nav-txt">Dashboard</span>
+      </button>
+    </nav>
+
+    <!-- Add Custom Button Modal Overlay -->
+    <div id="modal-add-button" class="modal-overlay hidden">
+      <div class="modal-card">
+        <h4 style="margin-bottom: 12px; font-size: 16px; font-weight: 800;">Add Custom Button</h4>
+        <input type="text" id="cust-btn-name" placeholder="Button Name (e.g. VS Code)" class="input-field">
+        <select id="cust-btn-icon" class="input-field" style="margin: 8px 0;">
+          <option value="💻">💻 Code</option>
+          <option value="🌐">🌐 Web Browser</option>
+          <option value="📁">📁 Files</option>
+          <option value="🚀">🚀 App</option>
+          <option value="🎵">🎵 Music</option>
+          <option value="🔒">🔒 Lock PC</option>
+        </select>
+        <select id="cust-btn-action-type" class="input-field">
+          <option value="app">Launch App (chrome, vscode, explorer, notepad)</option>
+          <option value="shortcut">Hotkey (ctrl+s, alt+tab, win+d)</option>
+        </select>
+        <input type="text" id="cust-btn-target" placeholder="Target key (e.g. chrome, ctrl+s)" class="input-field" style="margin: 8px 0;">
+        <div class="flex gap-2" style="margin-top: 12px;">
+          <button id="btn-save-cust-btn" class="btn btn-primary" style="flex: 1;">Save Button</button>
+          <button id="btn-cancel-cust-btn" class="btn btn-tool" style="flex: 1;">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Intruder Alert Modal Overlay -->
+    <div id="modal-intruder-alert" class="modal-overlay hidden modal-alert-red">
+      <div class="modal-card modal-intruder-card">
+        <div class="intruder-header">
+          <span class="pulse-alarm-dot"></span>
+          <h3 style="color: #f43f5e;">🚨 INTRUDER ALERT!</h3>
+        </div>
+        <p class="intruder-subtitle">Someone physically moved the mouse or touched your PC!</p>
+        <div class="intruder-photo-wrap">
+          <img id="intruder-modal-img" src="" alt="Intruder Photo">
+        </div>
+        <div class="intruder-meta">
+          <span id="intruder-time-text">Time: Just now</span>
+        </div>
+        <div class="flex gap-2" style="margin-top: 14px;">
+          <button id="btn-intruder-lock" class="btn btn-danger" style="flex: 1.2;">🔒 Lock PC</button>
+          <button id="btn-intruder-alarm" class="btn btn-warning" style="flex: 1;">🔔 Alarm</button>
+          <button id="btn-intruder-dismiss" class="btn btn-tool" style="flex: 0.8;">Dismiss</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="/static/app.js?v=2.4"></script>
+</body>
+</html>

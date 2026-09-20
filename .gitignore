@@ -1,0 +1,23 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# PyInstaller build artifacts & executables
+build/
+dist/
+*.spec
+*.exe
+
+# Local private device & session state
+.device_id
+.paired_devices.json
+.custom_remotes.json
+
+# Environment & IDE
+.env
+.venv/
+env/
+venv/
+.vscode/
+.idea/
